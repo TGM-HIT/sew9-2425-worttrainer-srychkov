@@ -2,6 +2,6 @@
 
 # Worttrainer Reloaded
 
-## Hier erstelle ich ein Programm bei welchem man die Tiere erraten sollte.
+## Hier entwickle ich ein Programm, bei dem man die Namen von Tieren anhand eines Bildes erraten muss.
 
 ## Dies mache ich in einem SW-Development Prozess.
