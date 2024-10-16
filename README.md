@@ -41,3 +41,5 @@
   - Mittels JOptionPane wird die bisherige Statistik und das aktuelle Bild angezeigt. Falls es nicht der erste Versuch ist, wird auch angezeigt ob der vorherige Versuch richtig oder falsch war. Außerdem wird hier eine Eingabemöglichkeit für das Wort gegeben.
   - Sofern die Eingabe nicht leer ist, wird die Eingabe überprüft und es geht von vorne los. Ansonsten wird die Schleife abgebrochen.
 - Zum Schluss wird der aktuelle Zustand des Worttrainers persistiert.
+
+# Ausführung des Programms:
