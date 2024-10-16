@@ -10,7 +10,7 @@ import javax.xml.bind.Unmarshaller;
  * Diese Klasse bietet Funktionen zum Speichern und Laden eines WortTrainer-Objekts.
  * Die Speicherung kann im XML-Format oder als Java-Serialized-Objekt erfolgen.
  */
-public class SpeichernLaden {
+public class SpeichernLaden implements SpeichernLadenInterface{
 
     /**
      * Speichert das WortTrainer-Objekt in einer Datei.
@@ -130,5 +130,15 @@ public class SpeichernLaden {
         if (path == null || path.trim().isEmpty()) {
             throw new IllegalArgumentException("Der Pfad darf nicht null oder leer sein");
         }
+    }
+
+    @Override
+    public void save(WortTrainer wortTrainer, String filePath) {
+
+    }
+
+    @Override
+    public WortTrainer load(String filePath) {
+        return null;
     }
 }

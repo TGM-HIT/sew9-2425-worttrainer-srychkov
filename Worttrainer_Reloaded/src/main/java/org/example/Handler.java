@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
-public class Controller {
+public class Handler {
     public WortTrainer wt;
     private JFrame frame; // Fenster für das Spiel
     private JLabel wordLabel; // Label für das aktuelle Wort
@@ -22,10 +22,10 @@ public class Controller {
     private JLabel imageLabel; // Label für das Bild
 
     public static void main(String[] args) {
-        new Controller(); // Controller Instanz wird erstellt
+        new Handler(); // Controller Instanz wird erstellt
     }
 
-    public Controller() {
+    public Handler() {
         // Versuch, gespeicherte Daten zu laden
         try {
             this.wt = SpeichernLaden.load(".\\worttrainer.save", false);
@@ -73,24 +73,31 @@ public class Controller {
         imageLabel.setPreferredSize(new Dimension(400, 200)); // Festlegen der Größe für das Bild
         frame.add(imageLabel, BorderLayout.CENTER);
 
+        // Panel für die Eingabe und den Überprüfen-Button
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new FlowLayout());
+
         // Textfeld für die Eingabe der Antwort
         answerField = new JTextField();
         answerField.setHorizontalAlignment(SwingConstants.CENTER);
         answerField.setPreferredSize(new Dimension(200, 30)); // Größe des Textfeldes festlegen
-        frame.add(answerField, BorderLayout.SOUTH); // Textfeld nach unten hinzufügen
+        inputPanel.add(answerField); // Textfeld zum Eingabe-Panel hinzufügen
 
         // Button zur Überprüfung der Antwort
-        checkButton = new JButton("Überprüfen");
+        checkButton = new JButton("Uberprufen");
         checkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkAnswer(); // Methode zur Überprüfung der Antwort aufrufen
             }
         });
-        frame.add(checkButton, BorderLayout.SOUTH); // Button nach unten hinzufügen
+        inputPanel.add(checkButton); // Button zum Eingabe-Panel hinzufügen
+
+        // Eingabe-Panel nach unten hinzufügen
+        frame.add(inputPanel, BorderLayout.SOUTH);
 
         // Button zum Hinzufügen eines Wortes
-        addButton = new JButton("Wort hinzufügen");
+        addButton = new JButton("Wort hinzufugen");
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -208,6 +215,8 @@ public class Controller {
             } else {
                 JOptionPane.showMessageDialog(frame, "Falsche Antwort! Versuche es erneut.");
             }
+            // Nach der Überprüfung ein neues Wort und Bild anzeigen
+            update(); // Aktualisieren der Anzeige mit einem neuen Wort und Bild
         } else {
             JOptionPane.showMessageDialog(frame, "Bitte gib eine Antwort ein.");
         }
