@@ -4,6 +4,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+/**
+ * In dieser Klasse wird der File gespeichert und geladen (vom Spiel)
+ */
 public class SpeichernLaden {
 
     /**
