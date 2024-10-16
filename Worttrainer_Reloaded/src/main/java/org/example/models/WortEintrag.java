@@ -9,7 +9,7 @@ import java.net.URL;
  * Diese Klasse repräsentiert einen WortEintrag, der ein Wort und eine URL speichert.
  * Sie bietet Methoden zum Abrufen und Überprüfen der URL.
  */
-public class WortEintrag {
+public class WortEintrag implements Serializable{
     // Private Felder für das Wort und die URL
     private String wort;
     private String url;

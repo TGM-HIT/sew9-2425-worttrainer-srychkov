@@ -85,6 +85,10 @@ public class WortListe implements Serializable {
         this.worte = newWords;
     }
 
+    public String getWort(int index) {
+        return worte[index].getWort();
+    }
+
     /**
      * Gibt die Länge der WortListe zurück.
      * @return Die Anzahl der WortEinträge in der Liste.
