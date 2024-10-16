@@ -43,3 +43,7 @@
 - Zum Schluss wird der aktuelle Zustand des Worttrainers persistiert.
 
 # Ausführung des Programms:
+
+Beim Ausführen wird ein Bild und Text von einem Tier dargestellt. Unter dem Bild kann man die Tiernamen eintragen.
+Falls man ein weiteres Wort/Tier hinzufügen möchte, ist dies durch den Knopf "Hinzufugen" möglich, dabei muss man das Wort hinschreiben und danach einen Link zu einem Bild benutzen. Nach mehreren Versuchen wird die Statistik oben angezeigt. Beim Beenden des Programms werden alle Daten gespeichert und beim Erneuten Start wiederverwendet.
+Beim Löschen der Datei wird ein neues Spiel gestartet.

@@ -10,6 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
+/**
+ * Main Klasse
+ * @author Sergej Rychkov
+ * @version 16-10-2024
+ */
 public class Handler {
     public WortTrainer wt;
     private JFrame frame; // Fenster für das Spiel

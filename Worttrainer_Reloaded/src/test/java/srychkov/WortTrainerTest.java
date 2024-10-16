@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Die Test Klasse
+ */
 class WortTrainerTest {
     private WortTrainer trainer;
     private WortListe wortListe; // WortListe remains as a member variable
