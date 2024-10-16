@@ -1,13 +1,20 @@
 package org.example.models;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAccessType;
 import java.io.Serializable;
 
 /**
  * Diese Klasse repräsentiert eine Liste von WortEinträgen (Wort und URL).
  * Sie bietet Funktionen zum Hinzufügen, Entfernen und Abrufen der Länge der Liste.
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class WortListe implements Serializable {
     // Ein Array, das die WortEinträge speichert
+    @XmlElement(name = "wortEintrag")
     private WortEintrag[] worte;
 
     /**
@@ -40,25 +47,36 @@ public class WortListe implements Serializable {
     public boolean removeWort(String wort) {
         boolean existiert = false; // Gibt an, ob das Wort gefunden wurde
 
-        // Erstellen eines neuen Arrays, das ein Element weniger hat
-        WortEintrag[] newWords = new WortEintrag[worte.length - 1];
-
-        // Durchlaufen der aktuellen Liste
-        for (int i = 0; i < this.worte.length; i++) {
-            // Wenn das Wort nicht mit dem gesuchten übereinstimmt, wird es in das neue Array eingefügt
-            if (!this.worte[i].getWort().equals(wort)) {
-                newWords[i] = new WortEintrag(this.worte[i].getWort(), this.worte[i].getUrl());
+        // Zähle, wie viele gültige Wörter bleiben werden
+        int neueLaenge = 0;
+        for (WortEintrag eintrag : worte) {
+            if (!eintrag.getWort().equals(wort)) {
+                neueLaenge++;
             } else {
                 existiert = true; // Das Wort wurde gefunden
             }
         }
 
-        // Wenn das Wort gefunden wurde, aktualisieren wir die Liste mit dem neuen Array
-        if (existiert) {
-            this.worte = newWords;
+        // Wenn das Wort nicht gefunden wurde, gibt es nichts zu entfernen
+        if (!existiert) {
+            return false;
         }
 
-        return existiert; // Rückgabe, ob das Wort entfernt wurde oder nicht
+        // Erstellen eines neuen Arrays mit der neuen Länge
+        WortEintrag[] newWords = new WortEintrag[neueLaenge];
+        int index = 0;
+
+        // Füllen des neuen Arrays
+        for (WortEintrag eintrag : worte) {
+            if (!eintrag.getWort().equals(wort)) {
+                newWords[index++] = eintrag;
+            }
+        }
+
+        // Aktualisieren der Liste
+        this.worte = newWords;
+
+        return true; // Das Wort wurde erfolgreich entfernt
     }
 
     /**
@@ -66,7 +84,7 @@ public class WortListe implements Serializable {
      * @param wort Das hinzuzufügende Wort.
      * @param url Die zugehörige URL.
      */
-    public void WortDazu(String wort, String url) {
+    public void wortHinzufuegen(String wort, String url) {
         // Erstellen eines neuen WortEintrags
         WortEintrag we = new WortEintrag(wort, url);
 
@@ -74,9 +92,7 @@ public class WortListe implements Serializable {
         WortEintrag[] newWords = new WortEintrag[worte.length + 1];
 
         // Kopieren der bestehenden Einträge in das neue Array
-        for (int i = 0; i < this.worte.length; i++) {
-            newWords[i] = this.worte[i];
-        }
+        System.arraycopy(this.worte, 0, newWords, 0, this.worte.length);
 
         // Hinzufügen des neuen WortEintrags am Ende
         newWords[worte.length] = we;
@@ -85,7 +101,16 @@ public class WortListe implements Serializable {
         this.worte = newWords;
     }
 
+    /**
+     * Gibt das Wort am angegebenen Index zurück.
+     * @param index Der Index des gewünschten Wortes.
+     * @return Das Wort am angegebenen Index.
+     * @throws IndexOutOfBoundsException Wenn der Index ungültig ist.
+     */
     public String getWort(int index) {
+        if (index < 0 || index >= worte.length) {
+            throw new IndexOutOfBoundsException("Ungültiger Index: " + index);
+        }
         return worte[index].getWort();
     }
 
@@ -96,12 +121,19 @@ public class WortListe implements Serializable {
     public int getLength() {
         return this.worte.length;
     }
-
+    public String getUrl(int index){
+        return worte[index].getUrl();
+    }
     /**
      * Überschreibt die toString-Methode, um eine formatierte Ausgabe der WortListe zu erhalten.
      * @return Eine Zeichenkette, die die Liste der WortEinträge darstellt.
      */
+    @Override
     public String toString() {
-        return this.worte.toString(); // Gibt die Array-Darstellung der WortEinträge zurück
+        StringBuilder sb = new StringBuilder();
+        for (WortEintrag eintrag : worte) {
+            sb.append(eintrag.toString()).append("\n");
+        }
+        return sb.toString();
     }
 }

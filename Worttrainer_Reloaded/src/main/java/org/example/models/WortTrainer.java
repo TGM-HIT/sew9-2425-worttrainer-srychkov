@@ -2,17 +2,24 @@ package org.example.models;
 
 import java.io.Serializable;
 import java.util.Random;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAccessType;
 
 /**
  * Diese Klasse repräsentiert einen Worttrainer, der Benutzer beim Lernen von Wörtern unterstützt.
  * Sie ermöglicht das Abrufen zufälliger Wörter und das Überprüfen der Eingaben des Benutzers.
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class WortTrainer implements Serializable {
     // Die WortListe, die die Wörter enthält
+    @XmlElement
     private WortListe wl;
 
     // Der aktuelle Index des Wortes, das trainiert wird
-    private int CurrentIndex;
+    private int currentIndex;
 
     // Zähler für die Anzahl der Eingaben des Benutzers
     private int eingaben = 0;
@@ -20,12 +27,15 @@ public class WortTrainer implements Serializable {
     // Zähler für die Anzahl der richtigen Antworten des Benutzers
     private int richtig = 0;
 
+    // Zufallszahlengenerator
+    private Random random = new Random();
+
     /**
      * Getter-Methode, um den aktuellen Index abzurufen.
      * @return Der aktuelle Index.
      */
     public int getCurrentIndex() {
-        return CurrentIndex;
+        return currentIndex;
     }
 
     /**
@@ -61,9 +71,19 @@ public class WortTrainer implements Serializable {
      * @return Das zufällig ausgewählte Wort.
      */
     public String randomWort() {
-        // Setzt den CurrentIndex auf einen zufälligen Wert innerhalb der Grenzen der WortListe
-        this.CurrentIndex = new Random().nextInt(wl.getLength());
-        return this.wl.getWort(CurrentIndex); // Gibt das Wort am aktuellen Index zurück
+        // Setzt den currentIndex auf einen zufälligen Wert innerhalb der Grenzen der WortListe
+        this.currentIndex = random.nextInt(wl.getLength());
+        return this.wl.getWort(currentIndex); // Gibt das Wort am aktuellen Index zurück
+    }
+    public String getImageUrlForWord(String word) {
+        // Beispielimplementation. Du musst diese Methode anpassen,
+        // um die korrekte URL für das gegebene Wort zurückzugeben.
+        for (int i = 0; i < this.wl.getLength(); i++) {
+            if (this.wl.getWort(i).equalsIgnoreCase(word)) {
+                return this.wl.getUrl(i); // gibt die zugehörige URL zurück
+            }
+        }
+        return null; // falls kein Bild gefunden wurde
     }
 
     /**
@@ -71,8 +91,8 @@ public class WortTrainer implements Serializable {
      * @param wort Das hinzuzufügende Wort.
      * @param url Die zugehörige URL.
      */
-    public void WortDazu(String wort, String url) {
-        this.wl.WortDazu(wort, url); // Ruft die Methode zum Hinzufügen des Wortes auf
+    public void wortHinzufuegen(String wort, String url) {
+        this.wl.wortHinzufuegen(wort, url); // Ruft die Methode zum Hinzufügen des Wortes auf
     }
 
     /**
@@ -82,7 +102,7 @@ public class WortTrainer implements Serializable {
      */
     public boolean checkWort(String wort) {
         eingaben++; // Erhöht den Eingabezähler
-        if (this.wl.getWort(CurrentIndex).equals(wort)) {
+        if (this.wl.getWort(currentIndex).equals(wort)) {
             richtig++; // Erhöht den Zähler für richtige Antworten
             return true; // Das Wort ist korrekt
         }
@@ -96,10 +116,18 @@ public class WortTrainer implements Serializable {
      */
     public boolean checkWortIgnoreLU(String wort) {
         eingaben++; // Erhöht den Eingabezähler
-        if (this.wl.getWort(CurrentIndex).equalsIgnoreCase(wort)) {
+        if (this.wl.getWort(currentIndex).equalsIgnoreCase(wort)) {
             richtig++; // Erhöht den Zähler für richtige Antworten
             return true; // Das Wort ist korrekt
         }
         return false; // Das Wort ist nicht korrekt
+    }
+
+    /**
+     * Getter-Methode für die WortListe.
+     * @return Die WortListe des WortTrainings.
+     */
+    public WortListe getWl() {
+        return wl; // Gibt die WortListe zurück
     }
 }
