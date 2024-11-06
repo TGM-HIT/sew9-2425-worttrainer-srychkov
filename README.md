@@ -1,4 +1,4 @@
-"# sew9-2425-worttrainer-srychkov"
+# sew9-2425-worttrainer-srychkov"
 
 # Worttrainer Reloaded
 
