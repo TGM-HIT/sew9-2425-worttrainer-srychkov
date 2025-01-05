@@ -52,7 +52,7 @@ public class Handler {
     }
 
     private void startGame() {
-        SwingUtilities.invokeLater(() -> update());
+        // GUI erstellen
         frame = new JFrame("Wort Trainer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
@@ -126,10 +126,18 @@ public class Handler {
         });
         frame.add(exitButton, BorderLayout.EAST);
 
-        // Spiel aktualisieren
-        update();
+        // **Füge hier die revalidate(), repaint(), und invokeLater-Aufrufe hinzu**
         frame.setVisible(true); // Fenster sichtbar machen
+        frame.revalidate();     // Layout neu berechnen
+        frame.repaint();        // Fenster neu zeichnen
+
+        // Bild initialisieren nach der Größenberechnung
+        SwingUtilities.invokeLater(() -> update());
+
+        // Spiel aktualisieren
+        update(); // Fenster initialisieren und anzeigen
     }
+
 
     public void update() {
         // Anzeige der bisherigen Statistiken
