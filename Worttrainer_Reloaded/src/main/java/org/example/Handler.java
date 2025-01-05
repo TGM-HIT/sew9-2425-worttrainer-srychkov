@@ -4,10 +4,13 @@ import org.example.models.SpeichernLaden;
 import org.example.models.WortListe;
 import org.example.models.WortTrainer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -33,13 +36,13 @@ public class Handler {
     public Handler() {
         // Versuch, gespeicherte Daten zu laden
         try {
-            this.wt = SpeichernLaden.load(".\\worttrainer.save", false);
+            this.wt = SpeichernLaden.load(".\\worttrainer.xml", false);
         } catch (RuntimeException e) {
             // Wenn keine Daten vorhanden sind, erstelle einen neuen WortTrainer
             this.wt = new WortTrainer(new WortListe(new String[]{
                     "Dog", "Cat"},
                     new String[]{
-                            "https://static.vecteezy.com/system/resources/thumbnails/005/857/332/small_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
+                            "https://www.shutterstock.com/image-photo/happy-puppdy-welsh-corgi-14-600nw-2270841247.jpg",
                             "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/800px-Cat03.jpg"
                     }));
         }
@@ -49,7 +52,7 @@ public class Handler {
     }
 
     private void startGame() {
-        // GUI erstellen
+        SwingUtilities.invokeLater(() -> update());
         frame = new JFrame("Wort Trainer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
@@ -159,7 +162,7 @@ public class Handler {
     }
 
     public void save() {
-        SpeichernLaden.save(this.wt, ".\\worttrainer.save", false);
+        SpeichernLaden.save(this.wt, ".\\worttrainer.xml", false);
     }
 
     public void load() {
@@ -171,8 +174,8 @@ public class Handler {
         this.wt = new WortTrainer(new WortListe(new String[]{
                 "Dog", "Cat"},
                 new String[]{
-                        "https://static.vecteezy.com/system/resources/thumbnails/005/857/332/small_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/800px-Cat03.jpg"
+                        "https://static.vecte1ezy.com/system/resources/thumbnails/005/857/332/small_2x/funny-portrait-of-cute-corgi-dog-outdoors-free-photo.jpg",
+                        "https://upload.wikim1edia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/800px-Cat03.jpg"
                 }));
         update(); // GUI nach der Neuerstellung aktualisieren
     }
@@ -200,16 +203,31 @@ public class Handler {
         if (imageUrl != null && !imageUrl.isEmpty()) {
             try {
                 URL url = new URL(imageUrl);
-                ImageIcon icon = new ImageIcon(url);
-                imageLabel.setIcon(icon); // Bild im Label anzeigen
-                imageLabel.setText(""); // Text im Label leeren
+                BufferedImage bufferedImage = ImageIO.read(url);
+
+                // Größe des imageLabels abrufen
+                int labelWidth = imageLabel.getWidth();
+                int labelHeight = imageLabel.getHeight();
+
+                if (labelWidth > 0 && labelHeight > 0) {
+                    // Bild proportional skalieren
+                    Image scaledImage = bufferedImage.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
+                    ImageIcon icon = new ImageIcon(scaledImage);
+                    imageLabel.setIcon(icon); // Bild im Label anzeigen
+                    imageLabel.setText(""); // Text im Label leeren
+                } else {
+                    // Standardanzeige, falls die Größe des Labels noch nicht festgelegt ist
+                    imageLabel.setIcon(new ImageIcon(bufferedImage));
+                }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "Fehler beim Laden des Bildes: " + e.getMessage());
             }
         } else {
             imageLabel.setIcon(null); // Kein Bild anzeigen, wenn die URL nicht vorhanden ist
+            imageLabel.setText("Kein Bild verfügbar");
         }
     }
+
 
     private void checkAnswer() {
         String userAnswer = answerField.getText(); // Text aus dem Eingabefeld abrufen
@@ -226,4 +244,6 @@ public class Handler {
             JOptionPane.showMessageDialog(frame, "Bitte gib eine Antwort ein.");
         }
     }
+    // Issue patch
+
 }
